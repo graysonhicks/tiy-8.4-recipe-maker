@@ -11,7 +11,7 @@ var TopNavComponent = React.createClass({
   handleReturn: function(e){
     e.preventDefault();
     console.log('return');
-    Backbone.history.navigate("", {trigger: true});
+    Backbone.history.navigate("home", {trigger: true});
   },
   render: function(){
     return(

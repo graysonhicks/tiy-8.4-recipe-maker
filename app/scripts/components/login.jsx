@@ -5,17 +5,50 @@ var _ = require('underscore');
 var Backbone = require('backbone');
 require('backbone-react-component');
 
+var Parse = require('parse');
+Parse.initialize("recipe-maker");
+Parse.serverURL = "http://grayson-tiny-server.herokuapp.com/";
+
+console.log(Parse);
 
 var LoginPageComponent = React.createClass({
   mixins: [Backbone.React.Component.mixin],
   login: function(username, password){
 
+    Parse.User.logIn(username, password, {
+      success: function(user) {
+        console.log(user);
+        console.log("Hello ",  user);
+        Backbone.history.navigate("home", {trigger: true});
+      },
+      error: function(user, error) {
+        // The login failed. Check error to see why.
+        console.log(error);
+      }
+    });
   },
   componentDidMount: function(){
     $("#wrapper").addClass("toggled");
   },
   createUser: function(username, email, password){
 
+    var user = new Parse.User();
+    user.set({
+      "username": username,
+      "password": password,
+      "email": email
+    });
+
+    user.signUp(null, {
+    success: function(user) {
+      console.log("success");
+      console.log(user);
+      Backbone.history.navigate("home", {trigger: true});
+    },
+    error: function(user, error) {
+      alert("Error: " + error.code + " " + error.message);
+    }
+  })
   },
   render: function(){
       return (
@@ -35,7 +68,6 @@ var LoginPageComponent = React.createClass({
       );
     }
   });
-
 
 var LoginComponent = React.createClass({
   mixins: [Backbone.React.Component.mixin],

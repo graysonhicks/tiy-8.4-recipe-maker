@@ -14,18 +14,15 @@ var SidebarComponent = React.createClass({
         <div id="sidebar-wrapper">
             <ul className="sidebar-nav">
                 <li className="sidebar-brand">
-                    <a href="#">
+                    <a href="#home">
                       Recipe Maker
                     </a>
                 </li>
                 <li>
-                    <a href="#">My Recipes <span className="glyphicon glyphicon-folder-open" /></a>
+                    <a href="#home">My Recipes <span className="glyphicon glyphicon-folder-open" /></a>
                 </li>
                 <li>
-                    <a href="#">Favorite Recipes <span className="glyphicon glyphicon-heart" /></a>
-                </li>
-                <li>
-                    <a glyphicon glyphicon-plus href="#">Add a New Recipe <span className="glyphicon glyphicon-plus" /></a>
+                    <a glyphicon glyphicon-plus href="#add">Add a New Recipe <span className="glyphicon glyphicon-plus" /></a>
                 </li>
             </ul>
         </div>

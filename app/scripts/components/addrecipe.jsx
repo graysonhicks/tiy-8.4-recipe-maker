@@ -18,20 +18,137 @@ var AddRecipeComponent = React.createClass({
             </div>
         </div>
         <div className="row">
-            <div className="col-md-8 col-md-offset-2">
+            <div className="col-md-8">
                 <img className="img-responsive" src="http://placehold.it/600x350" alt="" />
                 <span>Upload an image...</span>
             </div>
-            <div className="col-md-12">
+            <div className="col-md-4">
               <form>
                 <fieldset className="form-group">
-                  <label htmlfor="name">Recipe Name</label>
                   <input type="text" className="form-control" id="name" placeholder="Recipe Name" />
+                </fieldset>
+                <fieldset className="form-group">
+                  <input type="text" className="form-control" id="author" placeholder="Author" />
+                </fieldset>
+                 <div className="checkbox" id="publiccheckbox">
+                  <label>
+                    <input type="checkbox">Make it public</input>
+                  </label>
+                </div>
+                 <div className="checkbox" id="privatecheckbox">
+                  <label>
+                    <input type="checkbox">Make it private</input>
+                  </label>
+                </div>
+              </form>
+            </div>
+          </div>
+          <div className="row">
+            <div className="col-md-12">
+              <form className="main-recipe-form">
+                 <fieldset className="form-group recipe-form-containers recipe-type-container">
+                  <select className="c-select">
+                    <option value="0">Recipe Type</option>
+                    <option value="1">Breakfast</option>
+                    <option value="2">Lunch</option>
+                    <option value="3">Dinner</option>
+                    <option value="3">Dessert</option>
+                  </select>
+                </fieldset>
+                <fieldset className="form-group recipe-form-containers preptime-container">
+                  <input type="text" className="form-control" id="preptime" placeholder="Prep Time" />
+                </fieldset>
+                <fieldset className="form-group recipe-form-containers cooktime-container">
+                  <input type="text" className="form-control" id="cooktime" placeholder="Cook Time" />
+                </fieldset>
+                <fieldset className="form-group recipe-form-containers temperature-container">
+                  <div className="input-group temperature-form">
+                    <input type="text" className="form-control" id="temperature" aria-label="..." placeholder="Temperature"/>
+                    <div className="input-group-btn">
+                      <button type="button" className="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">F <span className="caret"></span></button>
+                      <ul className="dropdown-menu">
+                        <li><a href="#">F </a></li>
+                        <li><a href="#">C </a></li>
+                      </ul>
+                    </div>
+                  </div>
                 </fieldset>
               </form>
             </div>
+          </div>
+          <div className="row">
+            <div className="col-md-12">
+              <form className="main-recipe-form">
+                <span>This recipe will make:</span>
+                <fieldset className="form-group recipe-form-containers amount-container">
+                  <input type="text" className="form-control" id="amount" placeholder="Amount" />
+                </fieldset>
+                <fieldset className="form-group recipe-form-containers type-description-container">
+                  <input type="text" className="form-control" id="type-description" placeholder="cookies, loaves, etc." />
+                </fieldset>
+              </form>
+            </div>
+          </div>
+          <div className="row">
+            <div className="col-md-12">
+              <h4>Step 1</h4>
+            </div>
+          </div>
+          <div className="row">
+            <div className="col-md-12">
+              <form className="main-recipe-form">
+                <fieldset className="form-group recipe-form-containers ingredient-amount-container">
+                  <input type="text" className="form-control" id="ingredient-amount" placeholder="2" />
+                </fieldset>
+                <fieldset className="form-group recipe-form-containers ingredient-unit-container">
+                 <select className="c-select">
+                   <option value="0">Cups</option>
+                   <option value="1">Tablespoons</option>
+                   <option value="2">Teaspoons</option>
+                   <option value="3">Fluid Oz</option>
+                   <option value="4">Oz</option>
+                   <option value="5">Pounds</option>
+                 </select>
+               </fieldset>
+               <fieldset className="form-group recipe-form-containers ingredient-name-container">
+                 <input type="text" className="form-control" id="ingredient-name" placeholder="Flour" />
+               </fieldset>
+               <button type="button" className="glyphicon glyphicon-minus" id="remove-ingredient-btn" />
+              </form>
+            </div>
+          </div>
+          <div className="row">
+          <div className="col-md-12">
+            <form className="main-recipe-form">
+              <fieldset className="form-group recipe-form-containers ingredient-amount-empty-container">
+                <input type="text" className="form-control" id="ingredient-amount-empty" placeholder="Amount" />
+              </fieldset>
+              <fieldset className="form-group recipe-form-containers ingredient-unit-empty-container">
+               <select className="c-select">
+                 <option value="1">Unit</option>
+               </select>
+             </fieldset>
+             <fieldset className="form-group recipe-form-containers ingredient-name-empty-container">
+               <input type="text" className="form-control" id="ingredient-name-empty" placeholder="Flour" />
+             </fieldset>
+             <button type="button" className="glyphicon glyphicon-plus" id="add-ingredient-btn" />
+            </form>
+          </div>
         </div>
-
+        <div className="row">
+        <div className="col-md-12">
+          <form className="main-recipe-form">
+            <fieldset className="form-group recipe-form-containers recipe-instructions-input-container">
+              <textarea className="form-control" id="recipe-instructions-input" rows="3" placeholder="What instructions go wit this step?"></textarea>
+            </fieldset>
+          </form>
+        </div>
+      </div>
+      <div className="row">
+        <div className="col-md-12">
+          <button type="button" className="btn btn-default" id="add-step-btn">Add Another Step</button>
+        </div>
+      </div>
         <hr />
     </div>
     )
