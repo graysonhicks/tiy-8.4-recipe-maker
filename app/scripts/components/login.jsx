@@ -14,13 +14,11 @@ console.log(Parse);
 var LoginPageComponent = React.createClass({
   mixins: [Backbone.React.Component.mixin],
   login: function(username, password){
-
     Parse.User.logIn(username, password, {
       success: function(user) {
-        console.log(user);
-        console.log("Hello ",  user);
         Backbone.history.navigate("home", {trigger: true});
-      },
+        this.props.setUser(user);
+      }.bind(this),
       error: function(user, error) {
         // The login failed. Check error to see why.
         console.log(error);

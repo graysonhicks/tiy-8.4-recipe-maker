@@ -10,22 +10,33 @@ var HomeGridComponent = require('./homegrid.jsx').HomeGridComponent;
 var AddRecipeComponent = require('./addrecipe.jsx').AddRecipeComponent;
 var LoginPageComponent = require('./login.jsx').LoginPageComponent;
 
+var Parse = require('parse');
+Parse.initialize("recipe-maker");
+Parse.serverURL = "http://grayson-tiny-server.herokuapp.com/";
+
+console.log(recipes);
 var MainComponent = React.createClass({
   mixins: [Backbone.React.Component.mixin],
  getInitialState: function(){
   return {
-    router: this.props.router
+    router: this.props.router,
+    userId: null
     };
   },
+  setUser: function(user){
+    console.log(user);
+    this.setState({"userId": user.id});
+    console.log(this.state.userId);
+  },
   render: function(){
-    console.log(this.state.router.current);
+    console.log('state recipes', this.state.recipes);
     var body;
     if(this.state.router.current == "index"){
-        body = <LoginPageComponent />
+        body = <LoginPageComponent setUser={this.setUser} />
         return body;
     }
     if(this.state.router.current == "home"){
-        body = <HomeGridComponent />
+        body = <HomeGridComponent collection={this.state.recipes}/>
         return body;
     }
     if(this.state.router.current == "recipe"){
@@ -33,7 +44,7 @@ var MainComponent = React.createClass({
       return body;
     }
     if(this.state.router.current == "add"){
-      body = <AddRecipeComponent />
+      body = <AddRecipeComponent userId={this.state.userId}/>
       return body;
     }
     return(

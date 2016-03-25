@@ -5,6 +5,8 @@ var _ = require('underscore');
 var Backbone = require('backbone');
 require('backbone-react-component');
 
+// Look at PARSE REACT MIXIN FOR QUERYING TO GET RECIPES COLLECTION
+
 var HomeGridComponent = React.createClass({
   mixins: [Backbone.React.Component.mixin],
   componentDidMount: function(){
@@ -16,6 +18,20 @@ var HomeGridComponent = React.createClass({
     $("#wrapper").toggleClass("toggled");
   },
   render: function(){
+    console.log(this.props.collection);
+    var gridItem = function(){
+      return(
+      <div className="col-md-4 portfolio-item">
+          <a href="#">
+              <img className="img-responsive" src="http://placehold.it/700x400" alt="" />
+          </a>
+          <h3>
+              <a href="#">Project Name</a>
+          </h3>
+          <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam viverra euismod odio, gravida pellentesque urna varius vitae.</p>
+      </div>
+    )
+    }
     return(
         <div className="container home-grid-container">
             <div className="row">
@@ -27,33 +43,7 @@ var HomeGridComponent = React.createClass({
                 </div>
             </div>
             <div className="row">
-                <div className="col-md-4 portfolio-item">
-                    <a href="#">
-                        <img className="img-responsive" src="http://placehold.it/700x400" alt="" />
-                    </a>
-                    <h3>
-                        <a href="#">Project Name</a>
-                    </h3>
-                    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam viverra euismod odio, gravida pellentesque urna varius vitae.</p>
-                </div>
-                <div className="col-md-4 portfolio-item">
-                    <a href="#">
-                        <img className="img-responsive" src="http://placehold.it/700x400" alt="" />
-                    </a>
-                    <h3>
-                        <a href="#">Project Name</a>
-                    </h3>
-                    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam viverra euismod odio, gravida pellentesque urna varius vitae.</p>
-                </div>
-                <div className="col-md-4 portfolio-item">
-                    <a href="#">
-                        <img className="img-responsive" src="http://placehold.it/700x400" alt="" />
-                    </a>
-                    <h3>
-                        <a href="#">Project Name</a>
-                    </h3>
-                    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam viverra euismod odio, gravida pellentesque urna varius vitae.</p>
-                </div>
+                {(this.props.collection).map(gridItem.bind(this))}
             </div>
           </div>
     )
