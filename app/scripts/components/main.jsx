@@ -14,7 +14,7 @@ var Parse = require('parse');
 Parse.initialize("recipe-maker");
 Parse.serverURL = "http://grayson-tiny-server.herokuapp.com/";
 
-console.log(recipes);
+
 var MainComponent = React.createClass({
   mixins: [Backbone.React.Component.mixin],
  getInitialState: function(){
@@ -29,14 +29,13 @@ var MainComponent = React.createClass({
     console.log(this.state.userId);
   },
   render: function(){
-    console.log('state recipes', this.state.recipes);
     var body;
     if(this.state.router.current == "index"){
         body = <LoginPageComponent setUser={this.setUser} />
         return body;
     }
     if(this.state.router.current == "home"){
-        body = <HomeGridComponent collection={this.state.recipes}/>
+        body = <HomeGridComponent />
         return body;
     }
     if(this.state.router.current == "recipe"){

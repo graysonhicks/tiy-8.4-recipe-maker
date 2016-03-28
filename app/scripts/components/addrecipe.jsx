@@ -17,6 +17,7 @@ var AddRecipeComponent = React.createClass({
       title: '',
       userId: this.props.userId,
       userName: '',
+      description: '',
       pubpriv: 'public',
       recipeType: '',
       prepTime: '',
@@ -227,6 +228,15 @@ var AddRecipeComponent = React.createClass({
               </div>
           </div>
         </div>
+        <div className="row">
+            <div className="col-md-9">
+                <div className="col-md-12">
+                  <fieldset className="form-group recipe-form-containers recipe-description-container">
+                    <textarea className="form-control" valueLink={this.linkState('description')} id="recipe-description-input" rows="3" placeholder="Please enter a brief description"></textarea>
+                  </fieldset>
+                </div>
+            </div>
+          </div>
           <div className="row">
             <div className="col-md-9">
               <button type="submit" action="submit" form="add-recipe-form" className="btn btn-success pull-right" id="save-recipe-btn">Save this Recipe!</button>
