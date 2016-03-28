@@ -39,7 +39,7 @@ var MainComponent = React.createClass({
         return body;
     }
     if(this.state.router.current == "recipe"){
-      body = <OneRecipeComponent />
+      body = <OneRecipeComponent recipe={this.state.router.id}/>
       return body;
     }
     if(this.state.router.current == "add"){

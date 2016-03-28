@@ -31,11 +31,11 @@ var HomeGridComponent = React.createClass({
       console.log(recipe);
       return(
       <div className="col-md-4 portfolio-item" id={recipe.objectId} key={recipe.objectId}>
-          <a href="#">
+          <a href={"#recipe/" + recipe.objectId}>
               <img className="img-responsive" src={recipe.url} alt="" />
           </a>
           <h3>
-              <a href="#">{recipe.title}</a>
+              <a href={"#recipe/" + recipe.objectId}>{recipe.title}</a>
           </h3>
           <p>{recipe.description}</p>
       </div>

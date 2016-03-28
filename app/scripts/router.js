@@ -9,7 +9,7 @@ var Router = Backbone.Router.extend({
   routes: {
     "": "index",
     "home": "home",
-    "recipe": "recipe",
+    "recipe/:id": "recipe",
     "add": "add"
   },
   index: function(){
@@ -19,9 +19,9 @@ var Router = Backbone.Router.extend({
   home: function(){
     this.current = "home";
   },
-  recipe: function(){
-    console.log('recipe');
+  recipe: function(id){
     this.current = "recipe";
+    this.id = id;
   },
   add: function(){
     console.log('add');
