@@ -10,11 +10,37 @@ var ParseReact = require('parse-react');
 Parse.initialize("recipe-maker");
 Parse.serverURL = "http://grayson-tiny-server.herokuapp.com/";
 
+var IngredientComponent = React.createClass({
+    mixins: [Backbone.React.Component.mixin, ParseReact.Mixin],
+    observe: function(){
+      return {
+        ingredients: (new Parse.Query('Ingredients').equalTo("recipe", this.props.recipe))
+      };
+    },
+    render: function(){
+      console.log(this.data.ingredients);
+        var newIngredient = function(ingredient){
+          console.log(ingredient);
+          return (
+            <div key={ingredient.objectId}>
+              {ingredient.name}
+            </div>
+          )
+        }
+
+      return(
+        <div>
+          {this.data.ingredients.map(newIngredient.bind(this))}
+        </div>
+      )
+    }
+});
+
 var OneRecipeComponent = React.createClass({
   mixins: [Backbone.React.Component.mixin],
   getInitialState: function(){
     return {
-      recipe: null
+
     }
   },
   toggleMenu: function(e){
@@ -22,13 +48,18 @@ var OneRecipeComponent = React.createClass({
     $("#wrapper").toggleClass("toggled");
   },
   componentWillMount: function(){
+
     var query = new Parse.Query("Recipes");
+
     query.get(this.props.recipe).then(function(recipe){
       this.setState({"recipe": recipe});
     }.bind(this));
+
   },
   render: function(){
+
     var recipe = this.state.recipe;
+
     if(this.state.recipe){
     return(
       <div className="container one-recipe-view-container">
@@ -49,12 +80,7 @@ var OneRecipeComponent = React.createClass({
                   <h3>About</h3>
                   <p>{recipe.get("description")}</p>
                   <h3>Project Details</h3>
-                  <ul>
-                      <li>Lorem Ipsum</li>
-                      <li>Dolor Sit Amet</li>
-                      <li>Consectetur</li>
-                      <li>Adipiscing Elit</li>
-                  </ul>
+                  <IngredientComponent key={this.state.recipe} recipe={this.state.recipe} />
               </div>
           </div>
           <div className="row">

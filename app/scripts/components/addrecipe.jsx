@@ -10,9 +10,48 @@ var Parse = require('parse');
 Parse.initialize("recipe-maker");
 Parse.serverURL = "http://grayson-tiny-server.herokuapp.com/";
 
+var Ingredients = Parse.Object.extend("Ingredients");
+
+var IngredientComponent = React.createClass({
+  mixins: [Backbone.React.Component.mixin, LinkedStateMixin],
+  render: function(){
+    return(
+        <div className="col-md-9">
+          <h4>Ingredient #{this.props.count}</h4>
+            <div className="col-md-3">
+              <fieldset className="form-group recipe-form-containers ingredient-amount-empty-container">
+                <input ref={"qty" + this.props.count} type="text" className="form-control" id="ingredient-amount-empty" placeholder="Amount" />
+              </fieldset>
+            </div>
+            <div className="col-md-3">
+              <fieldset className="form-group recipe-form-containers ingredient-unit-empty-container">
+               <select ref={"unit" + this.props.count} className="c-select form-control">
+                 <option value="0">Cups</option>
+                 <option value="1">Tablespoons</option>
+                 <option value="2">Teaspoons</option>
+                 <option value="3">Fluid Oz</option>
+                 <option value="4">Oz</option>
+                 <option value="5">Pounds</option>
+               </select>
+             </fieldset>
+           </div>
+           <div className="col-md-3">
+             <fieldset className="form-group recipe-form-containers ingredient-name-empty-container">
+               <input ref={"name" + this.props.count} type="text" className="form-control" id="ingredient-name-empty" placeholder="Flour" />
+             </fieldset>
+           </div>
+           <div className="col-md-3">
+            <button type="button" onClick={this.props.addIngredient} className="glyphicon glyphicon-plus" id="add-ingredient-btn" />
+             <button type="button" onClick={this.props.removeIngredient} className="glyphicon glyphicon-minus" id="remove-ingredient-btn" />
+           </div>
+        </div>
+        )}
+});
+
+
 var AddRecipeComponent = React.createClass({
   mixins: [Backbone.React.Component.mixin, LinkedStateMixin],
- getInitialState: function(){
+  getInitialState: function(){
     return {
       title: '',
       userId: this.props.userId,
@@ -26,19 +65,28 @@ var AddRecipeComponent = React.createClass({
       tempScale: '',
       servingsBase: 0,
       servingsUnit: '',
-      ingredients: '',
-      ingredientUnit: '',
-      ingredientName: '',
+      ingredientCount: 1,
       steps: '',
       notes: '',
       url: ''
     }
+  },
+  addIngredient: function(event){
+    event.preventDefault();
+    var newCount = this.state.ingredientCount + 1;
+    this.setState({'ingredientCount': newCount});
+  },
+  removeIngredient: function(event){
+    event.preventDefault();
+    var newCount = this.state.ingredientCount - 1;
+    this.setState({'ingredientCount': newCount});
   },
   handleSubmit: function(e){
     e.preventDefault();
     console.log(this.state);
     var Recipe = Parse.Object.extend("Recipes");
     var recipe = new Recipe();
+    var self= this;
 
     recipe.set(this.state);
 
@@ -46,6 +94,40 @@ var AddRecipeComponent = React.createClass({
       success: function(recipe) {
         // Execute any logic that should take place after the object is saved.
         alert('New object created with objectId: ' + recipe.id);
+
+        var recipeIngredients = [];
+
+        for(var i=1; i <= self.state.ingredientCount; i++){
+          // Get ingredient formset values
+          console.log("formset: ", i, self.refs["formset"+i].refs["units"+i]);
+
+          var qty = self.refs["formset"+i].refs["qty"+i].value;
+        //  var units = self.refs["formset"+i].refs["units"+i].value;
+          var name = self.refs["formset"+i].refs["name"+i].value;
+
+          // Setup parse object (model)
+          var ingredient = new Ingredients();
+          ingredient.set('qty', parseInt(qty));
+    //      ingredient.set('units', units);
+          ingredient.set('name', name);
+          ingredient.set('recipe', recipe);
+
+          // Push parse obj to array for batch saving
+          recipeIngredients.push(ingredient);
+        }
+
+        console.log(recipeIngredients);
+
+        // Batch save all ingredients
+        Parse.Object.saveAll(recipeIngredients, {
+          success: function(list) {
+            console.log(list);
+            alert('ing saved!');
+          },
+          error: function(error) {
+            console.log(error);
+          }
+        });
       },
       error: function(recipe, error) {
         // Execute any logic that should take place if the save fails.
@@ -55,6 +137,13 @@ var AddRecipeComponent = React.createClass({
     });
   },
   render: function(){
+
+     var ingredientForms = [];
+    for(var i=1; i<= this.state.ingredientCount; i++){
+      var count = i;
+      ingredientForms.push(<IngredientComponent addIngredient={this.addIngredient} removeIngredient={this.removeIngredient} ingredientCount={this.state.ingredientCount} key={count} count={count} ref={"formset"+count}/>);
+    }
+
     return(
     <div className="container add-recipe-view-container">
         <div className="row">
@@ -152,58 +241,8 @@ var AddRecipeComponent = React.createClass({
               <h4>Step 1</h4>
             </div>
           </div>
-          <div className="row">
-            <div className="col-md-9">
-                <div className="col-md-3">
-                  <fieldset className="form-group recipe-form-containers ingredient-amount-container">
-                    <input type="text" className="form-control" id="ingredient-amount" placeholder="2" />
-                  </fieldset>
-                </div>
-                <div className="col-md-3">
-                  <fieldset className="form-group recipe-form-containers ingredient-unit-container">
-                   <select valueLink={this.linkState('ingredientUnit')} className="c-select form-control">
-                     <option value="0">Cups</option>
-                     <option value="1">Tablespoons</option>
-                     <option value="2">Teaspoons</option>
-                     <option value="3">Fluid Oz</option>
-                     <option value="4">Oz</option>
-                     <option value="5">Pounds</option>
-                   </select>
-                 </fieldset>
-               </div>
-               <div className="col-md-3">
-                 <fieldset className="form-group recipe-form-containers ingredient-name-container">
-                   <input type="text" valueLink={this.linkState('ingredientName')} className="form-control" id="ingredient-name" placeholder="Flour" />
-                 </fieldset>
-               </div>
-               <div className="col-md-3">
-                 <button type="button" className="glyphicon glyphicon-minus" id="remove-ingredient-btn" />
-               </div>
-            </div>
-          </div>
-          <div className="row">
-          <div className="col-md-9">
-              <div className="col-md-3">
-                <fieldset className="form-group recipe-form-containers ingredient-amount-empty-container">
-                  <input type="text" className="form-control" id="ingredient-amount-empty" placeholder="Amount" />
-                </fieldset>
-              </div>
-              <div className="col-md-3">
-                <fieldset className="form-group recipe-form-containers ingredient-unit-empty-container">
-                 <select className="c-select form-control">
-                   <option value="1">Unit</option>
-                 </select>
-               </fieldset>
-             </div>
-             <div className="col-md-3">
-               <fieldset className="form-group recipe-form-containers ingredient-name-empty-container">
-                 <input type="text" className="form-control" id="ingredient-name-empty" placeholder="Flour" />
-               </fieldset>
-             </div>
-             <div className="col-md-3">
-               <button type="button" className="glyphicon glyphicon-plus" id="add-ingredient-btn" />
-             </div>
-          </div>
+        <div className="row">
+            {ingredientForms}
         </div>
         <div className="row">
           <div className="col-md-9">
